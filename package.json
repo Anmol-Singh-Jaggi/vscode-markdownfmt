@@ -2,7 +2,7 @@
 	"name": "vscode-markdownfmt",
 	"displayName": "markdownfmt",
 	"description": "Markdown formatter for VS Code using `markdownfmt`",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"publisher": "AnmolSinghJaggi",
 	"author": {
 		"name": "Anmol Singh Jaggi",
@@ -31,12 +31,6 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "markdownfmt.format",
-				"title": "Format markdown"
-			}
-		],
 		"configuration": {
 			"type": "object",
 			"title": "markdownfmt configuration",
