@@ -8,11 +8,17 @@ import * as crypto from 'crypto';
 
 function runFormatter(text: string, filePath: string): string {
 	let markdownfmtCommand: string = vscode.workspace.getConfiguration('markdownfmt')['command'];
-	// Create a temporary file to store the current document text.
-	// In case the formatter is executed without the file being saved.
+	// Create a temporary file to store the current document text,
+	// in case the formatter is executed without the file being saved.
 	const tempDirPath = os.tmpdir();
-	const tempFileName = 'markdownfmt_' + crypto.createHash('md5').update(filePath).digest('hex') + '.md';
-	const tempFilePath = path.join(tempDirPath, tempFileName);
+	let tempFileName = 'markdownfmt_' + crypto.createHash('md5').update(filePath).digest('hex') + '.md';
+	let tempFilePath = path.join(tempDirPath, tempFileName);
+	let tempFileNamingAttempts = 10;
+	// Make multiple limited attempts to find a unique temp file name.
+	while (tempFileNamingAttempts-- && fs.existsSync(tempFilePath)) {
+		tempFileName = tempFileName.replace('.md', `${tempFileNamingAttempts}.md`);
+		tempFilePath = path.join(tempDirPath, tempFileName);
+	}
 	fs.writeFileSync(tempFilePath, text);
 	markdownfmtCommand += ` "${tempFilePath}"`
 	const processOutput = spawnSync(markdownfmtCommand, { shell: true });
